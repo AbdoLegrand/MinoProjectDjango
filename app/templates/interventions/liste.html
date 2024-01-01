@@ -1,0 +1,73 @@
+{% extends 'navbar.html' %}
+ {% block title %}Liste des Intervenants {% endblock%} 
+ {% block content %}
+<a href="{% url 'ajouter_intervention' %}" class="btn btn-primary">Ajouter</a>
+
+
+<table class="table" id="dataTable">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Eype</th>
+      <th scope="col">État</th>
+      <th scope="col">Motive</th>
+      <th scope="col">Client</th>
+      <th scope="col">Intervenant</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for intervention in interventions %}
+    <tr>
+      <td>{{ intervention.date }}</td>
+      <td>{{ intervention.type }}</td>
+      <td>{{ intervention.etat }}</td>
+      <td>{{ intervention.motive }}</td>
+      <td>{{ intervention.client.nom }} {{ intervention.client.prenom }}</td>
+      <td>{{ intervention.intervenant.nom }} {{ intervention.intervenant.prenom }}</td>
+      <td>
+        <a href="{% url 'modifier_intervention' intervention.id %}">Modifier</a
+        ><a>&nbsp;|</a>
+        <a href="{% url 'supprimer_intervention' intervention.id %}">Supprimer</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<script>
+  {% if messages %}
+    {% for message in messages %}
+      {% if 'success' in message.tags %}
+        // Affichez la boîte de dialogue SweetAlert2 pour l'ajout
+        Swal.fire({
+          title: 'Ajout réussi',
+          text: '{{ message }}',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      {% elif 'warning' in message.tags %}
+        // Affichez la boîte de dialogue SweetAlert2 pour la suppression
+        Swal.fire({
+          title: 'Suppression réussie',
+          text: '{{ message }}',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      {% elif 'info' in message.tags %}
+        Swal.fire({
+          title: 'Modification réussie',
+          text: '{{ message }}',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+</script>
+
+
+
+{% endblock content %}

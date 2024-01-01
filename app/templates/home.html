@@ -1,0 +1,156 @@
+{% extends 'navbar.html' %} 
+{% block title %}Home{% endblock %}
+
+ {%block content %}
+
+ <div class="form-group">
+    <span id="element"></span>
+ </div>
+  <div>
+    <button class="btn btn-primary download"  >Download PDF </button>
+</div>
+<br><br><br>
+<div class="row d-flex elem" >
+    <div class="from-group">
+      <h6 class="card-title">
+        ✓ Le pourcentage des taches réalisées par chaque intervenant
+      </h6>
+      <canvas id="myChart"></canvas>
+    </div>
+    <br><br><br>
+
+    <div class="form-group ms-5">
+      <h6 class="card-title">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+        ✓ Le pourcentage des tâches réalisées ou en attentes.
+      </h6>
+      <canvas id="myChart1"> </canvas>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<script>
+    const labelsIntervenant = [{% for intervenant in labels %} "{{intervenant}}", {% endfor %}];
+    const dataIntervenant = [{% for pourcentage in values %} {{ pourcentage }}, {% endfor %}];
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labelsIntervenant,
+            datasets: [{
+                data: dataIntervenant,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(255, 206, 86, 0.8)',
+                    'rgba(153, 102, 255, 0.8)',
+                ],
+            }]
+        },
+        options: {
+            plugins: {
+                datalabels: {
+                    color: '#fff',
+                    formatter: (value, ctx) => {
+                        let label = ctx.chart.data.labels[ctx.dataIndex];
+                        return label + ': ' + value.toFixed(2) + '%';
+                    },
+                    anchor: 'end',
+                    align: 'start'
+                }
+            },
+            legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                    fontColor: '#000'
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+  const ctx1 = document.getElementById('myChart1');
+
+  new Chart(ctx1, {
+      type: 'pie',
+      data: {
+          labels: [
+              'Le pourcentage des tâches réalisées', 'Le pourcentage des tâches en attentes'
+          ],
+          datasets: [{
+              data: [
+              {{ P_taches_realisees }},
+              {{ P_taches_en_attente }}
+              ],
+              backgroundColor: [
+                  'rgba(54, 162, 235, 0.8)',
+                  'rgba(75, 192, 192, 0.8)',
+              ],
+          }]
+      },
+      options: {
+          plugins: {
+              datalabels: {
+                  color: '#fff', // Couleur du texte
+                  formatter: (value, ctx) => {
+                      let label = ctx1.chart.data.labels[ctx.dataIndex];
+                      return label + ': ' + value + '%';
+                  },
+                  anchor: 'end',
+                  align: 'start'
+              }
+          },
+          legend: {
+              display: true,
+              position: 'bottom', // Placez les légendes en bas
+              labels: {
+                  fontColor: '#000' // Couleur du texte de la légende
+              }
+          }
+      }
+  });
+</script>
+
+<script>
+   
+    var typed = new Typed('#element', {
+     strings: ["<h2>C'est une application de gestion de tâches</h2> ",
+      " <h2>qui permet à un client de demander à un intervenant </h2>",
+       "<h2>d'effectuer une intervention.</h2>"],
+     typeSpeed: 50,
+     loop: true
+  });
+  </script>
+
+  
+<script>
+    let div = document.querySelector(".elem");
+    let btn = document.querySelector(".download");
+  
+    btn.addEventListener('click', () => {
+        const pdfOptions = {
+            filename: 'graphe.pdf', // nom du fichier
+            image: { type: 'jpeg', quality: 0.98 }, // format d'image et qualité
+            html2canvas: { scale: 2 }, // échelle pour html2canvas
+            jsPDF: { unit: 'mm', format: 'a4',  } // orientation paysage
+        };
+  
+        const contentWidth = div.offsetWidth;
+        const contentHeight = div.offsetHeight;
+  
+        html2pdf().from(div).set(pdfOptions).outputPdf(function(pdf) {
+            const totalPages = pdf.internal.getNumberOfPages();
+  
+            for (let i = 1; i <= totalPages; i++) {
+                pdf.setPage(i);
+                pdf.addImage(contentWidth, contentHeight);
+            }
+        }).save();
+    });
+  </script>
+
+{% endblock content %}

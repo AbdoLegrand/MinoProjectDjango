@@ -1,0 +1,64 @@
+
+
+{% extends 'navbar.html' %}
+
+{% block title %}Liste des Clients{% endblock %}
+
+{% block content %}
+<a href="{% url 'ajouter_client' %}" class="btn btn-primary">Ajouter</a>
+
+<table class="table" id="dataTable">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Direction</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for client in clients %}
+      <tr>
+        <td>{{ client.nom }}</td>
+        <td>{{ client.prenom }}</td>
+        <td>{{ client.direction }}</td>
+        <td>
+          <a href="{% url 'modifier_client' client.id %}" >Modifier</a><a>&nbsp;|</a>
+          <a href="{% url 'supprimer_client' client.id %}">Supprimer</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<script>
+  {% if messages %}
+    {% for message in messages %}
+      {% if 'success' in message.tags %}
+        Swal.fire({
+          title: 'Ajout réussi',
+          text: '{{ message }}',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      {% elif 'warning' in message.tags %}
+        Swal.fire({
+          title: 'Suppression réussie',
+          text: '{{ message }}',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      {% elif 'info' in message.tags %}
+        Swal.fire({
+          title: 'Modification réussie',
+          text: '{{ message }}',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+</script>
+
+{% endblock %}

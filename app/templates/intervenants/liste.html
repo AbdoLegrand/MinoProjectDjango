@@ -1,0 +1,62 @@
+{% extends 'navbar.html' %} 
+{% block title %}Liste des Intervenants {% endblock %} 
+{% block content %}
+<a href="{% url 'ajouter_intervenant' %}" class="btn btn-primary">Ajouter</a>
+
+<table class="table" id="dataTable">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Poste</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for intervenant in intervenants %}
+    <tr>
+      <td>{{ intervenant.nom }}</td>
+      <td>{{ intervenant.prenom }}</td>
+      <td>{{ intervenant.poste }}</td>
+      <td>
+        <a href="{% url 'modifier_intervenant' intervenant.id %}">Modifier</a>
+        <a>&nbsp;|</a>
+        <a href="{% url 'supprimer_intervenant' intervenant.id %}">Supprimer</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script>
+  {% if messages %}
+    {% for message in messages %}
+      {% if 'success' in message.tags %}
+        // Affichez la boîte de dialogue SweetAlert2 pour l'ajout
+        Swal.fire({
+          title: 'Ajout réussi',
+          text: '{{ message }}',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      {% elif 'warning' in message.tags %}
+        // Affichez la boîte de dialogue SweetAlert2 pour la suppression
+        Swal.fire({
+          title: 'Suppression réussie',
+          text: '{{ message }}',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      {% elif 'info' in message.tags %}
+        Swal.fire({
+          title: 'Modification réussie',
+          text: '{{ message }}',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+</script>
+
+{% endblock content %}

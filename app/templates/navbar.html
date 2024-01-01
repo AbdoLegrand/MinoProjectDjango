@@ -1,0 +1,76 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Inclure les liens Bootstrap CSS -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <script src="{% static 'js/typed.umd.js' %}"></script>
+  <script src="{% static 'js/sweetalert2@11.js' %}"></script>
+
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+
+  <title>{% block title %}Votre Application{% endblock %}</title>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg " id="navbar" style="background-color: rgba(40, 58, 90, 0.9); margin-bottom: 1.5rem;">
+    <div class="container">
+
+        <a class="navbar-brand" href="#">Gestion des interventions</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto"> <!-- Added ml-auto class here -->
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Home</a>
+            </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'liste_client' %}">Les clients</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'liste_intervenant' %}">Les intervenants</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'liste_intervention' %}">Les interventions</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'signout' %}">Déconnecter</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+  <!-- Contenu spécifique à chaque page -->
+  <div class="container mt-4">
+    {% block content %}  {% endblock %}
+  </div>
+
+  <!-- Inclure les liens Bootstrap JS et jQuery -->
+  <script src="{% static 'js/jquery-3.5.1.slim.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/html2pdf.bundle.min.js' %}"></script>
+
+
+  <!-- Inclure les liens DataTables JS -->
+  <script type="text/javascript" charset="utf8" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+  <script type="text/javascript" charset="utf8" src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+
+  <!-- Initialisez DataTables -->
+  <script>
+    $(document).ready(function () {
+      $('#dataTable').DataTable();
+    });
+  </script>
+
+
+  <!-- Liens typed -->
+</body>
+
+</html>
